@@ -25,7 +25,19 @@ fn first_star(input: &File) {
 }
 
 fn second_star(input: &File) {
-    println!("");
+    let b = BufReader::new(input);    
+    let mut crates: Vec<String> = get_crates();
+    for line in b.lines() {
+        let l = line.unwrap();
+        let changes: Vec<u32> = get_changes(l);
+        let from: usize = (changes[1]-1).try_into().unwrap();
+        let to: usize = (changes[2]-1).try_into().unwrap();
+        let moves: usize = (changes[0]).try_into().unwrap();
+        let p = crates[from][crates[from].len()-moves..].to_string();
+        crates[to] += &p;
+        crates[from] = crates[from][0..crates[from].len()-moves].to_string();
+    }
+    println!("{:?}", crates);
 }
 
 fn get_crates() -> Vec<String> {
